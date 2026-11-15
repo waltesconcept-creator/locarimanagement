@@ -1,4 +1,5 @@
-const API_BASE = 'http://localhost:4000/api';
+const isLocalVite = typeof window !== 'undefined' && window.location.port === '5173';
+const API_BASE = isLocalVite ? 'http://localhost:4000/api' : '/api';
 
 export const api = {
   // Properties
