@@ -9,6 +9,7 @@ import {
   CheckSquare, 
   Smartphone, 
   Settings,
+  ArrowLeft,
   X
 } from 'lucide-react';
 import { LocariLogo } from './LocariLogo';
@@ -20,6 +21,7 @@ interface SidebarProps {
   pendingMaintCount?: number;
   isMobileOpen?: boolean;
   setIsMobileOpen?: (open: boolean) => void;
+  onExitToWebsite?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
@@ -28,18 +30,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
   arrearsCount = 1,
   pendingMaintCount = 1,
   isMobileOpen = false,
-  setIsMobileOpen
+  setIsMobileOpen,
+  onExitToWebsite
 }) => {
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'properties', label: 'Properties & Units', icon: Building2 },
-    { id: 'landlords', label: 'Landlords & Diaspora', icon: Crown },
+    { id: 'landlords', label: 'Landlords', icon: Crown },
     { id: 'tenants', label: 'Tenants', icon: Users2 },
     { id: 'rent', label: 'Rent & Payments', icon: CreditCard, badge: arrearsCount > 0 ? `${arrearsCount} Overdue` : undefined, badgeColor: 'bg-red-500/10 text-red-500 border-red-500/20' },
     { id: 'maintenance', label: 'Maintenance', icon: Wrench, badge: pendingMaintCount > 0 ? `${pendingMaintCount} Approval` : undefined, badgeColor: 'bg-amber-500/10 text-amber-500 border-amber-500/20' },
     { id: 'tasks', label: 'Tasks & Ops', icon: CheckSquare },
-    { id: 'simulator', label: 'WhatsApp Simulator', icon: Smartphone, highlight: true },
-    { id: 'settings', label: 'Settings & BotSailor', icon: Settings },
+    { id: 'simulator', label: 'WhatsApp Assistant', icon: Smartphone, highlight: true },
+    { id: 'settings', label: 'Settings & Integrations', icon: Settings },
   ];
 
   const handleSelect = (id: string) => {
@@ -87,26 +90,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Diaspora Quick Notice Card */}
-      <div className="p-3.5 rounded-2xl bg-surface-100 dark:bg-surface-900 border border-surface-200 dark:border-surface-800 space-y-1.5 text-xs">
-        <div className="font-bold text-surface-900 dark:text-surface-100">
-          Diaspora Mode Active
+      {/* Return to Landing Page Button */}
+      {onExitToWebsite && (
+        <div className="pt-4 border-t border-surface-200 dark:border-surface-850">
+          <button
+            onClick={onExitToWebsite}
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-surface-500 hover:text-surface-900 dark:hover:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-900 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Website</span>
+          </button>
         </div>
-        <p className="text-[11px] text-surface-500 leading-relaxed">
-          Overseas landlords receive WhatsApp financial summaries & repair video proofs automatically.
-        </p>
-      </div>
+      )}
     </div>
   );
 
   return (
     <>
-      {/* 1. Desktop Persistent Sidebar (Only visible on screens >= 1024px) */}
+      {/* 1. Desktop Persistent Sidebar */}
       <aside className="hidden lg:flex w-64 border-r border-surface-200 dark:border-surface-850 bg-white dark:bg-surface-950 shrink-0">
         {navContent}
       </aside>
 
-      {/* 2. Mobile Flyout Drawer Modal (Visible when isMobileOpen is true) */}
+      {/* 2. Mobile Flyout Drawer Modal */}
       {isMobileOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           {/* Backdrop */}

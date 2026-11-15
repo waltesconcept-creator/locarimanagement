@@ -67,6 +67,15 @@ export const api = {
     return res.json();
   },
 
+  async recordPayment(data: any) {
+    const res = await fetch(`${API_BASE}/rent/payments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
   async verifyPayment(paymentId: string) {
     const res = await fetch(`${API_BASE}/rent/payments/${paymentId}/verify`, {
       method: 'POST',
@@ -154,6 +163,25 @@ export const api = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ fromPhone, messageText, senderName })
+    });
+    return res.json();
+  },
+
+  // Authentication
+  async loginUser(identifier: string) {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ identifier })
+    });
+    return res.json();
+  },
+
+  async registerUser(data: { fullName: string; email?: string; phone: string; role?: string; orgName?: string }) {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
     });
     return res.json();
   }

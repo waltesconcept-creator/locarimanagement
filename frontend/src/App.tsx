@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
 import { BottomNav } from './components/BottomNav';
+import { LandingPage } from './pages/LandingPage';
+import { AuthModal } from './components/AuthModal';
+import { AddPropertyModal } from './components/AddPropertyModal';
+import { RecordPaymentModal } from './components/RecordPaymentModal';
 import { OverviewPage } from './pages/OverviewPage';
 import { PropertiesPage } from './pages/PropertiesPage';
 import { LandlordsPage } from './pages/LandlordsPage';
@@ -16,12 +20,21 @@ import { Property, Landlord, Tenant, RentSchedule, PaymentRecord, MaintenanceReq
 import { RefreshCw, X } from 'lucide-react';
 
 export const App: React.FC = () => {
+  // Navigation & View State
+  const [view, setView] = useState<'landing' | 'console'>('landing');
   const [currentTab, setCurrentTab] = useState('overview');
+  
+  // Modals
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signup');
   const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isAddPropertyOpen, setIsAddPropertyOpen] = useState(false);
+  const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
 
-  // Core Data State
+  // User & Data State
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [properties, setProperties] = useState<Property[]>([]);
   const [landlords, setLandlords] = useState<Landlord[]>([]);
   const [tenants, setTenants] = useState<Tenant[]>([]);
@@ -58,11 +71,73 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     loadData();
+    // Check if user previously logged in
+    const savedUser = localStorage.getItem('locari_pm_user');
+    if (savedUser) {
+      try {
+        setCurrentUser(JSON.parse(savedUser));
+      } catch (e) {}
+    }
   }, []);
+
+  const handleAuthSuccess = (user: any) => {
+    setCurrentUser(user);
+    localStorage.setItem('locari_pm_user', JSON.stringify(user));
+    setView('console');
+    loadData();
+  };
+
+  const handleOpenAuth = (mode: 'signin' | 'signup') => {
+    setAuthMode(mode);
+    setIsAuthModalOpen(true);
+  };
 
   const overdueCount = rentSchedules.filter(s => s.status === 'overdue').length;
   const pendingApprovalsCount = maintenance.filter(m => m.status === 'pending_landlord_approval').length;
 
+  // 1. RENDER LANDING PAGE FIRST
+  if (view === 'landing') {
+    return (
+      <>
+        <LandingPage
+          onLaunchConsole={() => setView('console')}
+          onOpenAuth={handleOpenAuth}
+          onOpenSimulator={() => setIsSimulatorOpen(true)}
+        />
+
+        {/* Global Auth Modal */}
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+          initialMode={authMode}
+          onAuthSuccess={handleAuthSuccess}
+        />
+
+        {/* Global WhatsApp Simulator Preview Modal */}
+        {isSimulatorOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/75 backdrop-blur-xs">
+            <div className="w-full max-w-4xl max-h-[96vh] sm:max-h-[92vh] overflow-y-auto rounded-3xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-4 sm:p-8 space-y-4 shadow-2xl relative animate-scaleUp">
+              <div className="flex items-center justify-between pb-3 border-b border-surface-200 dark:border-surface-800">
+                <div className="font-headline font-bold text-base sm:text-lg text-surface-900 dark:text-surface-100">
+                  Locari WhatsApp Assistant (Live Interactive Test)
+                </div>
+                <button
+                  onClick={() => setIsSimulatorOpen(false)}
+                  className="w-8 h-8 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center text-surface-500 hover:text-surface-900 dark:hover:text-surface-100"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <WhatsAppSimulatorPage onDataMutated={loadData} />
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  // 2. RENDER DASHBOARD CONSOLE
   return (
     <div className="min-h-screen bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-surface-100 flex flex-col antialiased selection:bg-brand-500 selection:text-surface-950">
       {/* Top Navbar */}
@@ -71,6 +146,8 @@ export const App: React.FC = () => {
         setCurrentTab={setCurrentTab} 
         openSimulator={() => setIsSimulatorOpen(true)}
         openMobileMenu={() => setIsMobileMenuOpen(true)}
+        onExitToWebsite={() => setView('landing')}
+        user={currentUser}
       />
 
       <div className="flex-1 flex overflow-hidden">
@@ -82,9 +159,10 @@ export const App: React.FC = () => {
           pendingMaintCount={pendingApprovalsCount}
           isMobileOpen={isMobileMenuOpen}
           setIsMobileOpen={setIsMobileMenuOpen}
+          onExitToWebsite={() => setView('landing')}
         />
 
-        {/* Main Workspace Area (With bottom padding on mobile for BottomNav) */}
+        {/* Main Workspace Area */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
           {loading ? (
             <div className="h-64 flex flex-col items-center justify-center gap-3 text-xs text-surface-400">
@@ -194,6 +272,22 @@ export const App: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Modals for Direct Interactivity */}
+      <AddPropertyModal
+        isOpen={isAddPropertyOpen}
+        onClose={() => setIsAddPropertyOpen(false)}
+        onSuccess={loadData}
+      />
+
+      <RecordPaymentModal
+        isOpen={isRecordPaymentOpen}
+        onClose={() => setIsRecordPaymentOpen(false)}
+        properties={properties}
+        tenants={tenants}
+        schedules={rentSchedules}
+        onSuccess={loadData}
+      />
     </div>
   );
 };

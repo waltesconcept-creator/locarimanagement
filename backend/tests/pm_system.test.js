@@ -126,12 +126,12 @@ test('Locari PM OS: Payment Reporting & Verification Integrity', async (t) => {
   assert.equal(record.status, 'reported');
 });
 
-test('Locari PM OS: Diaspora Maintenance Approval Flow', async (t) => {
-  const diasporaPhone = '+447911123456'; // Chief Adeleke in London
+test('Locari PM OS: Landlord Maintenance Approval Flow', async (t) => {
+  const landlordPhone = '+2348023456789'; // Chief Adeleke
 
   // 1. Check maintenance on WhatsApp
   const r1 = await conversationalEngine.processIncomingMessage({
-    fromPhone: diasporaPhone,
+    fromPhone: landlordPhone,
     messageText: 'Maintenance'
   });
   assert.ok(r1.responseText.includes('Borehole Submersible Pump Failure'));
@@ -139,7 +139,7 @@ test('Locari PM OS: Diaspora Maintenance Approval Flow', async (t) => {
 
   // 2. Approve repair
   const r2 = await conversationalEngine.processIncomingMessage({
-    fromPhone: diasporaPhone,
+    fromPhone: landlordPhone,
     messageText: 'Approve'
   });
   assert.ok(r2.responseText.includes('Expense Approved!'));

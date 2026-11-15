@@ -50,7 +50,6 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
     .reduce((acc, s) => acc + s.balance_remaining, 0);
 
   const pendingApprovals = maintenance.filter(m => m.status === 'pending_landlord_approval');
-  const diasporaCount = landlords.filter(l => l.is_diaspora).length;
 
   return (
     <div className="space-y-6 sm:space-y-8 animate-fadeIn max-w-7xl mx-auto">
@@ -64,7 +63,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
             Portfolio Control Centre
           </h1>
           <p className="text-xs sm:text-sm text-surface-400 leading-relaxed">
-            Managing properties across Ibadan, Lagos, and overseas diaspora portfolios. Single source of truth synchronized live with your WhatsApp Assistant.
+            Complete portfolio oversight, rent tracking, and maintenance operations. Single source of truth synchronized live with your WhatsApp Assistant.
           </p>
         </div>
 
@@ -142,20 +141,20 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
           </div>
         </div>
 
-        {/* KPI 4: Diaspora Oversight & Approvals */}
+        {/* KPI 4: Landlord Portfolios & Approvals */}
         <div className="p-5 rounded-2xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-2.5">
           <div className="flex items-center justify-between text-xs font-bold text-surface-500">
-            <span>Diaspora Landlords</span>
+            <span>Landlords</span>
             <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center shrink-0">
               <Crown className="w-4 h-4" />
             </div>
           </div>
           <div className="text-2xl font-black font-headline text-surface-900 dark:text-surface-100">
-            {diasporaCount} <span className="text-xs font-semibold text-surface-400">Overseas</span>
+            {landlords.length} <span className="text-xs font-semibold text-surface-400">Owners</span>
           </div>
           <div className="text-[11px] font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
             <Clock className="w-3.5 h-3.5 shrink-0" />
-            <span>{pendingApprovals.length} pending landlord approval</span>
+            <span>{pendingApprovals.length} pending maintenance approval</span>
           </div>
         </div>
       </div>

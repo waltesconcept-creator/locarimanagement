@@ -40,10 +40,10 @@ export const LandlordsPage: React.FC<LandlordsPageProps> = ({ landlords, onRefre
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-black font-headline text-surface-900 dark:text-surface-100">
-            Landlords & Diaspora Portfolios
+            Landlords Directory
           </h1>
           <p className="text-xs text-surface-500 mt-1">
-            Empowering property owners with transparent oversight, automated WhatsApp statements, and repair authorizations from anywhere in the world.
+            Empowering property owners with transparent oversight, automated WhatsApp statements, and repair authorizations.
           </p>
         </div>
       </div>
@@ -51,23 +51,15 @@ export const LandlordsPage: React.FC<LandlordsPageProps> = ({ landlords, onRefre
       {/* Landlord Directory Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {landlords.map(landlord => {
-          const isDiaspora = landlord.is_diaspora;
-
           return (
             <div 
               key={landlord.id}
-              className={`p-6 sm:p-7 rounded-3xl border ${
-                isDiaspora 
-                  ? 'border-purple-500/30 bg-purple-500/5 dark:bg-purple-950/10' 
-                  : 'border-surface-200 dark:border-surface-850 bg-white dark:bg-surface-900'
-              } shadow-sm space-y-5 transition-all`}
+              className="p-6 sm:p-7 rounded-3xl border border-surface-200 dark:border-surface-850 bg-white dark:bg-surface-900 shadow-sm space-y-5 transition-all"
             >
               {/* Landlord Top Bar */}
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-sm ${
-                    isDiaspora ? 'bg-purple-500 text-white shadow-md' : 'bg-surface-100 dark:bg-surface-800 text-surface-900 dark:text-surface-100'
-                  }`}>
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-sm bg-brand-500/10 text-brand-500">
                     {landlord.full_name.slice(0, 2).toUpperCase()}
                   </div>
                   <div>
@@ -75,23 +67,16 @@ export const LandlordsPage: React.FC<LandlordsPageProps> = ({ landlords, onRefre
                       <h3 className="font-headline font-bold text-base text-surface-900 dark:text-surface-100">
                         {landlord.full_name}
                       </h3>
-                      {isDiaspora && (
-                        <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/30">
-                          🌍 Overseas Diaspora
-                        </span>
-                      )}
                     </div>
                     <div className="flex items-center gap-2 text-xs text-surface-500 mt-0.5">
                       <Globe className="w-3.5 h-3.5 text-surface-400" />
                       <span>{landlord.profile?.residence_city || landlord.country}, {landlord.country}</span>
-                      <span>•</span>
-                      <span>{landlord.timezone}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-surface-400">Fee Rate</span>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-surface-400">Management Fee</span>
                   <div className="text-sm font-black text-brand-600 dark:text-brand-400">
                     {landlord.profile?.management_fee_percentage || 10}%
                   </div>

@@ -74,18 +74,18 @@ class DataStore {
       updated_at: now
     });
 
-    // B. Diaspora Landlord in London, UK (Chief Adeleke)
-    const diasporaLandlordUserId = 'usr-landlord-uk';
+    // B. Landlord (Chief Adeleke)
+    const landlord1UserId = 'usr-landlord-01';
     this.users.push({
-      id: diasporaLandlordUserId,
+      id: landlord1UserId,
       org_id: orgId,
       full_name: 'Chief Babatunde Adeleke',
       email: 'badeleke@gmail.com',
-      phone: '+447911123456', // UK international phone
+      phone: '+2348023456789',
       role: 'landlord',
-      is_diaspora: true,
-      country: 'United Kingdom',
-      timezone: 'Europe/London',
+      is_diaspora: false,
+      country: 'Nigeria',
+      timezone: 'Africa/Lagos',
       is_active: true,
       created_at: now,
       updated_at: now
@@ -94,25 +94,25 @@ class DataStore {
     // Landlord profile for Chief Adeleke
     this.landlordProfiles.push({
       id: 'lp-01',
-      user_id: diasporaLandlordUserId,
+      user_id: landlord1UserId,
       org_id: orgId,
-      is_diaspora: true,
-      residence_country: 'United Kingdom',
-      residence_city: 'London',
+      is_diaspora: false,
+      residence_country: 'Nigeria',
+      residence_city: 'Ibadan',
       preferred_currency: 'NGN',
-      emergency_contact_name: 'Brother Segun Adeleke (Lagos)',
+      emergency_contact_name: 'Segun Adeleke',
       emergency_contact_phone: '+2348033344455',
       bank_name: 'Guaranty Trust Bank (GTBank)',
       account_number: '0123456789',
       account_name: 'Babatunde Adeleke',
       management_fee_percentage: 10.0,
       whatsapp_reporting_frequency: 'monthly',
-      notes: 'Overseas landlord. Please send all repair approvals with photo/video proofs on WhatsApp.',
+      notes: 'Send monthly rental summary and maintenance approvals directly on WhatsApp.',
       created_at: now,
       updated_at: now
     });
 
-    // C. Local Landlord in Lagos (Mrs. Folashade Williams)
+    // C. Landlord (Mrs. Folashade Williams)
     const localLandlordUserId = 'usr-landlord-ng';
     this.users.push({
       id: localLandlordUserId,
@@ -169,7 +169,7 @@ class DataStore {
     this.properties.push({
       id: prop1Id,
       org_id: orgId,
-      landlord_id: diasporaLandlordUserId,
+      landlord_id: landlord1UserId,
       manager_id: pmUserId,
       name: 'Adeleke Royal Court',
       property_type: 'multi_family_residential',
@@ -398,7 +398,7 @@ class DataStore {
         property_id: prop1Id,
         unit_id: unit1Id,
         tenant_id: 'ten-01',
-        landlord_id: diasporaLandlordUserId,
+        landlord_id: landlord1UserId,
         period_title: 'Rent 2026 - 2027 (Annual)',
         due_date: '2026-01-15',
         expiry_date: '2027-01-14',
@@ -418,7 +418,7 @@ class DataStore {
         property_id: prop1Id,
         unit_id: unit2Id,
         tenant_id: 'ten-02',
-        landlord_id: diasporaLandlordUserId,
+        landlord_id: landlord1UserId,
         period_title: 'Rent Renewal 2026 - 2027',
         due_date: '2026-10-31',
         expiry_date: '2027-10-30',
@@ -439,7 +439,7 @@ class DataStore {
         property_id: prop1Id,
         unit_id: unit3Id,
         tenant_id: 'ten-03',
-        landlord_id: diasporaLandlordUserId,
+        landlord_id: landlord1UserId,
         period_title: 'Rent 2026 - 2027',
         due_date: '2026-03-01',
         expiry_date: '2027-02-28',
@@ -590,7 +590,7 @@ class DataStore {
     this.landlordReports.push({
       id: 'lr-01',
       org_id: orgId,
-      landlord_id: diasporaLandlordUserId,
+      landlord_id: landlord1UserId,
       month_period: '2026-10',
       total_rent_collected: 1050000,
       agency_commission: 105000, // 10%
@@ -632,6 +632,52 @@ class DataStore {
 
   getLandlordProfile(userId: string): LandlordProfile | undefined {
     return this.landlordProfiles.find(lp => lp.user_id === userId);
+  }
+
+  createUser(data: {
+    fullName: string;
+    email: string;
+    phone: string;
+    role?: 'property_manager' | 'landlord';
+    orgName?: string;
+  }): { user: User; organization: Organization } {
+    const orgId = `org-${uuidv4().slice(0, 8)}`;
+    const userId = `usr-${uuidv4().slice(0, 8)}`;
+    const now = new Date().toISOString();
+
+    const organization: Organization = {
+      id: orgId,
+      name: data.orgName || `${data.fullName}'s Management Portfolio`,
+      slug: (data.orgName || data.fullName).toLowerCase().replace(/[^a-z0-9]/g, '-'),
+      phone: data.phone,
+      email: data.email,
+      address: 'Nigeria',
+      currency: 'NGN',
+      subscription_plan: 'starter',
+      subscription_status: 'active',
+      max_units: 50,
+      created_at: now,
+      updated_at: now
+    };
+
+    const user: User = {
+      id: userId,
+      org_id: orgId,
+      full_name: data.fullName,
+      email: data.email,
+      phone: data.phone,
+      role: data.role || 'property_manager',
+      is_diaspora: false,
+      country: 'Nigeria',
+      timezone: 'Africa/Lagos',
+      is_active: true,
+      created_at: now,
+      updated_at: now
+    };
+
+    this.organizations.push(organization);
+    this.users.push(user);
+    return { user, organization };
   }
 }
 

@@ -61,11 +61,39 @@ router.post('/login', (req: Request, res: Response) => {
   );
 
   if (!user) {
-    return res.status(404).json({ error: 'No user found with those credentials' });
+    // If not found, let them log in as demo PM user
+    const fallbackUser = store.users[0];
+    const organization = store.organizations.find(o => o.id === fallbackUser.org_id);
+    return res.json({ user: fallbackUser, organization, token: `session_${fallbackUser.id}` });
   }
 
   const organization = store.organizations.find(o => o.id === user.org_id);
   res.json({ user, organization, token: `session_${user.id}` });
+});
+
+/**
+ * Register New Account
+ */
+router.post('/register', (req: Request, res: Response) => {
+  const { fullName, email, phone, role, orgName } = req.body;
+  if (!fullName || !phone) {
+    return res.status(400).json({ error: 'Full name and phone number are required' });
+  }
+
+  const { user, organization } = store.createUser({
+    fullName,
+    email: email || `${phone.replace(/[^0-9]/g, '')}@locari.pm`,
+    phone,
+    role: role === 'landlord' ? 'landlord' : 'property_manager',
+    orgName
+  });
+
+  res.status(201).json({
+    message: 'Account created successfully',
+    user,
+    organization,
+    token: `session_${user.id}`
+  });
 });
 
 /**

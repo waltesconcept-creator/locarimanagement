@@ -56,6 +56,54 @@ router.get('/payments', (req: Request, res: Response) => {
 });
 
 /**
+ * Record a new payment manually from the console
+ */
+router.post('/payments', (req: Request, res: Response) => {
+  const { tenant_id, unit_id, amount, payment_method, bank_reference, payment_date } = req.body;
+  if (!tenant_id || !unit_id || !amount) {
+    return res.status(400).json({ error: 'Tenant, unit, and amount are required' });
+  }
+
+  const now = new Date().toISOString();
+  const paymentId = `pay-${Date.now().toString().slice(-6)}`;
+  const tenant = store.tenants.find(t => t.id === tenant_id);
+  const schedule = store.rentSchedules.find(s => s.unit_id === unit_id);
+
+  const numAmount = Number(amount);
+  const newPayment: any = {
+    id: paymentId,
+    org_id: tenant?.org_id || 'org-locari-01',
+    rent_schedule_id: schedule?.id,
+    tenant_id,
+    unit_id,
+    amount: numAmount,
+    payment_date: payment_date || now.split('T')[0],
+    payment_method: payment_method || 'bank_transfer',
+    bank_reference: bank_reference || `REF-${Math.floor(100000 + Math.random() * 900000)}`,
+    status: 'verified',
+    receipt_number: `REC-${Date.now().toString().slice(-6)}`,
+    verified_by_user_id: 'usr-pm-01',
+    verified_at: now
+  };
+
+  store.paymentRecords.unshift(newPayment);
+
+  // If there is an active rent schedule, update amounts
+  if (schedule) {
+    schedule.amount_paid += numAmount;
+    schedule.balance_remaining = Math.max(0, schedule.balance_remaining - numAmount);
+    if (schedule.balance_remaining <= 0) {
+      schedule.status = 'paid';
+    }
+  }
+
+  res.status(201).json({
+    message: 'Payment recorded and verified successfully',
+    payment: newPayment
+  });
+});
+
+/**
  * Verify a reported payment (reconcile with bank account)
  */
 router.post('/payments/:id/verify', (req: Request, res: Response) => {
