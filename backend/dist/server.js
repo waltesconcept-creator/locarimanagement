@@ -48,13 +48,23 @@ app.use('/api/discovery', discoveryRoutes);
 // Serve frontend production build if available
 const frontendDistPath = path.resolve(__dirname, '../../frontend/dist');
 if (fs.existsSync(frontendDistPath)) {
-    app.use(express.static(frontendDistPath));
+    app.use(express.static(frontendDistPath, {
+        setHeaders: (res, filePath) => {
+            if (filePath.endsWith('.html')) {
+                res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            }
+            else if (filePath.includes(path.sep + 'assets' + path.sep) || filePath.includes('/assets/')) {
+                res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+            }
+        }
+    }));
     app.get('*', (req, res, next) => {
         if (req.path.startsWith('/api') || req.path.startsWith('/webhook') || req.path === '/health') {
             return next();
         }
         const indexPath = path.join(frontendDistPath, 'index.html');
         if (fs.existsSync(indexPath)) {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
             return res.sendFile(indexPath);
         }
         next();
