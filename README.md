@@ -2,6 +2,11 @@
 
 A complete, standalone property management operating system engineered specifically for **Locari Digital Services** ([locari.africa](https://locari.africa)). Built to empower **property managers, landlords, and overseas diaspora property owners** managing real estate across Nigeria (Ibadan, Lagos, Abuja, and beyond).
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/bajirenike-lab/locari-property-management)
+
+* **GitHub Repository:** [https://github.com/bajirenike-lab/locari-property-management](https://github.com/bajirenike-lab/locari-property-management)
+* **1-Click Render Deploy:** [https://render.com/deploy?repo=https://github.com/bajirenike-lab/locari-property-management](https://render.com/deploy?repo=https://github.com/bajirenike-lab/locari-property-management)
+
 ---
 
 ## 🌟 Architecture & Highlights
