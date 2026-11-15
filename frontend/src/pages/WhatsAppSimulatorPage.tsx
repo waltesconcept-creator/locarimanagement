@@ -212,10 +212,10 @@ export const WhatsAppSimulatorPage: React.FC<WhatsAppSimulatorPageProps> = ({ on
         </div>
 
         {/* Right Side: Smartphone Device Frame */}
-        <div className="lg:col-span-7 flex justify-center">
-          <div className="w-full max-w-md rounded-[2.5rem] bg-surface-950 p-3 shadow-2xl border-4 border-surface-800">
+        <div className="lg:col-span-7 flex justify-center w-full">
+          <div className="w-full max-w-md rounded-3xl sm:rounded-[2.5rem] bg-surface-950 p-2 sm:p-3 shadow-2xl border-2 sm:border-4 border-surface-800">
             {/* Phone Screen */}
-            <div className="rounded-[2rem] bg-[#0c1317] text-white flex flex-col h-[580px] overflow-hidden relative">
+            <div className="rounded-2xl sm:rounded-[2rem] bg-[#0c1317] text-white flex flex-col h-[520px] sm:h-[580px] overflow-hidden relative">
               {/* WhatsApp Header */}
               <div className="bg-[#202c33] px-4 py-3 flex items-center justify-between shadow-md shrink-0">
                 <div className="flex items-center gap-3">

@@ -97,10 +97,10 @@ export const TenantsPage: React.FC<TenantsPageProps> = ({ tenants, properties, o
             }
             setIsAddModalOpen(true);
           }}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-black text-xs uppercase tracking-wider transition-all shadow-sm"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-black text-xs uppercase tracking-wider transition-all shadow-sm self-start sm:self-auto whitespace-nowrap"
         >
-          <Plus className="w-4 h-4" />
-          <span>Register New Tenant</span>
+          <Plus className="w-4 h-4 shrink-0" />
+          <span className="whitespace-nowrap">Register New Tenant</span>
         </button>
       </div>
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { Property, Landlord, RentSchedule, MaintenanceRequest, TaskItem } from '../types';
 import { 
   Building2, 
-  DoorOpen, 
   CreditCard, 
   AlertTriangle, 
   Wrench, 
@@ -54,68 +53,68 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
   const diasporaCount = landlords.filter(l => l.is_diaspora).length;
 
   return (
-    <div className="space-y-8 animate-fadeIn">
-      {/* Top Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-surface-950 text-white border border-surface-800 shadow-xl relative overflow-hidden">
-        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-brand-500/10 to-transparent pointer-events-none"></div>
-        <div className="space-y-1.5 z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-brand-500/20 text-brand-400 border border-brand-500/30">
-            <span>🚀 Locari OS Central Console</span>
+    <div className="space-y-6 sm:space-y-8 animate-fadeIn max-w-7xl mx-auto">
+      {/* Top Banner (Full width on mobile, spacious, clean typography) */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 p-6 sm:p-8 rounded-3xl bg-surface-950 text-white border border-surface-800 shadow-xl relative overflow-hidden">
+        <div className="space-y-2 z-10 max-w-2xl">
+          <div className="text-[11px] font-black uppercase tracking-widest text-brand-400">
+            Locari Central Console
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black font-headline tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black font-headline tracking-tight leading-tight">
             Portfolio Control Centre
           </h1>
-          <p className="text-xs sm:text-sm text-surface-400 max-w-xl">
-            Managing properties across Ibadan, Lagos, and overseas diaspora landlords. Single source of truth synchronized live with your WhatsApp Assistant.
+          <p className="text-xs sm:text-sm text-surface-400 leading-relaxed">
+            Managing properties across Ibadan, Lagos, and overseas diaspora portfolios. Single source of truth synchronized live with your WhatsApp Assistant.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 z-10">
+        {/* Action Buttons: strictly on a straight line, no weird text breaking */}
+        <div className="flex items-center gap-3 z-10 flex-wrap sm:flex-nowrap shrink-0">
           <button
             onClick={() => setCurrentTab('properties')}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-850 hover:bg-surface-800 text-white text-xs font-bold border border-surface-700 transition-colors"
+            className="whitespace-nowrap px-4 py-2.5 rounded-xl bg-surface-850 hover:bg-surface-800 text-white text-xs font-bold border border-surface-700 transition-colors inline-flex items-center gap-2"
           >
-            <PlusCircle className="w-4 h-4 text-brand-500" />
-            <span>Add Property</span>
+            <PlusCircle className="w-4 h-4 text-brand-500 shrink-0" />
+            <span className="whitespace-nowrap">Add Property</span>
           </button>
           <button
             onClick={openSimulator}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 text-xs font-black uppercase tracking-wider transition-transform hover:scale-105 active:scale-95 shadow-md"
+            className="whitespace-nowrap px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 text-xs font-black uppercase tracking-wider transition-transform hover:scale-105 active:scale-95 shadow-md inline-flex items-center gap-2"
           >
-            <Smartphone className="w-4 h-4" />
-            <span>Test On WhatsApp</span>
+            <Smartphone className="w-4 h-4 shrink-0" />
+            <span className="whitespace-nowrap">WhatsApp Assistant</span>
           </button>
         </div>
       </div>
 
-      {/* Primary KPI Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {/* Primary KPI Grid (Fully responsive on mobile) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {/* KPI 1: Total Rent Collected */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-3">
+        <div className="p-5 rounded-2xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-2.5">
           <div className="flex items-center justify-between text-xs font-bold text-surface-500">
             <span>Collected Rent</span>
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
               <CreditCard className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black font-headline text-surface-900 dark:text-surface-100">
+          <div className="text-2xl font-black font-headline text-surface-900 dark:text-surface-100 whitespace-nowrap">
             ₦{totalRentCollected.toLocaleString()}
           </div>
           <div className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5" />
+            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
             <span>Reconciled & verified payments</span>
           </div>
         </div>
 
         {/* KPI 2: Outstanding Arrears */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-3">
+        <div className="p-5 rounded-2xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-2.5">
           <div className="flex items-center justify-between text-xs font-bold text-surface-500">
             <span>Outstanding Arrears</span>
-            <div className="w-8 h-8 rounded-xl bg-red-500/10 text-red-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-red-500/10 text-red-600 flex items-center justify-center shrink-0">
               <AlertTriangle className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black font-headline text-red-600 dark:text-red-400">
+          <div className="text-2xl font-black font-headline text-red-600 dark:text-red-400 whitespace-nowrap">
             ₦{totalArrears.toLocaleString()}
           </div>
           <button 
@@ -128,10 +127,10 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
         </div>
 
         {/* KPI 3: Occupancy Rate */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-3">
+        <div className="p-5 rounded-2xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-2.5">
           <div className="flex items-center justify-between text-xs font-bold text-surface-500">
             <span>Portfolio Occupancy</span>
-            <div className="w-8 h-8 rounded-xl bg-brand-500/10 text-brand-500 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-brand-500/10 text-brand-500 flex items-center justify-center shrink-0">
               <Building2 className="w-4 h-4" />
             </div>
           </div>
@@ -144,10 +143,10 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
         </div>
 
         {/* KPI 4: Diaspora Oversight & Approvals */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-3">
+        <div className="p-5 rounded-2xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-2.5">
           <div className="flex items-center justify-between text-xs font-bold text-surface-500">
-            <span>Diaspora & Approvals</span>
-            <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center">
+            <span>Diaspora Landlords</span>
+            <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center shrink-0">
               <Crown className="w-4 h-4" />
             </div>
           </div>
@@ -155,30 +154,30 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
             {diasporaCount} <span className="text-xs font-semibold text-surface-400">Overseas</span>
           </div>
           <div className="text-[11px] font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5" />
+            <Clock className="w-3.5 h-3.5 shrink-0" />
             <span>{pendingApprovals.length} pending landlord approval</span>
           </div>
         </div>
       </div>
 
-      {/* Two Column Grid: Diaspora Approvals & Urgent Follow-ups */}
+      {/* Two Column Grid: Approvals & Follow-ups */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 2 Cols: Urgent Attention & Approvals */}
         <div className="lg:col-span-2 space-y-6">
           {/* Action Needed Card */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-sm space-y-4">
+          <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-4">
             <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
+              <div>
                 <h3 className="font-headline font-bold text-base text-surface-900 dark:text-surface-100">
                   Landlord Expense Approvals
                 </h3>
-                <p className="text-xs text-surface-500">
-                  Maintenance workorders above approval thresholds awaiting landlord or manager sign-off.
+                <p className="text-xs text-surface-500 mt-0.5">
+                  Maintenance workorders above approval thresholds awaiting landlord sign-off.
                 </p>
               </div>
               <button 
                 onClick={() => setCurrentTab('maintenance')}
-                className="text-xs font-bold text-brand-500 hover:underline"
+                className="text-xs font-bold text-brand-500 hover:underline shrink-0"
               >
                 View all
               </button>
@@ -196,7 +195,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                     className="p-4 rounded-2xl border border-amber-500/30 bg-amber-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                   >
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-500 text-surface-950">
                           {req.priority}
                         </span>
@@ -204,22 +203,20 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                           {req.title}
                         </span>
                       </div>
-                      <p className="text-xs text-surface-500 line-clamp-1">
-                        {req.property_name} ({req.unit_number}) • Landlord: {req.landlord_name} {req.landlord_is_diaspora ? '(🇬🇧 UK)' : ''}
+                      <p className="text-xs text-surface-500">
+                        {req.property_name} ({req.unit_number}) • Landlord: {req.landlord_name} {req.landlord_is_diaspora ? '(UK)' : ''}
                       </p>
                       <div className="text-xs font-black text-amber-600 dark:text-amber-400">
                         Estimated Cost: ₦{req.estimated_cost?.toLocaleString()}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setCurrentTab('maintenance')}
-                        className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-surface-950 text-xs font-bold transition-colors"
-                      >
-                        Review & Approve
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => setCurrentTab('maintenance')}
+                      className="whitespace-nowrap px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-surface-950 text-xs font-bold transition-colors self-start sm:self-auto"
+                    >
+                      Review & Approve
+                    </button>
                   </div>
                 ))}
               </div>
@@ -227,21 +224,21 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
           </div>
 
           {/* Overdue Rent Quick Call List */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-sm space-y-4">
+          <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-4">
             <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
+              <div>
                 <h3 className="font-headline font-bold text-base text-surface-900 dark:text-surface-100">
                   Overdue Rent Follow-Ups
                 </h3>
-                <p className="text-xs text-surface-500">
+                <p className="text-xs text-surface-500 mt-0.5">
                   Tenants with overdue balances ready for WhatsApp notice delivery.
                 </p>
               </div>
               <button 
                 onClick={() => setCurrentTab('rent')}
-                className="text-xs font-bold text-brand-500 hover:underline"
+                className="text-xs font-bold text-brand-500 hover:underline shrink-0"
               >
-                Go to Rent Ledger
+                Go to Ledger
               </button>
             </div>
 
@@ -267,10 +264,10 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                     href={`https://wa.me/${item.tenant_phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${item.tenant_name}, this is a gentle reminder regarding your outstanding rent balance of ₦${item.balance_remaining.toLocaleString()} for ${item.unit_number} at ${item.property_name}. Please advise on transfer date. Thank you.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3.5 py-1.5 rounded-xl bg-surface-100 dark:bg-surface-800 hover:bg-surface-200 text-surface-900 dark:text-surface-100 text-xs font-bold flex items-center gap-1.5 transition-colors self-start sm:self-auto"
+                    className="whitespace-nowrap px-3.5 py-1.5 rounded-xl bg-surface-100 dark:bg-surface-800 hover:bg-surface-200 text-surface-900 dark:text-surface-100 text-xs font-bold flex items-center gap-1.5 transition-colors self-start sm:self-auto"
                   >
                     <span>Send Reminder Notice</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
+                    <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
                   </a>
                 </div>
               ))}
@@ -280,10 +277,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
 
         {/* Right 1 Col: Diaspora Landlord Hub */}
         <div className="space-y-6">
-          <div className="p-6 rounded-3xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 text-brand-500 font-bold text-xs uppercase tracking-wider">
-              <span>🌍</span>
-              <span>Overseas Portfolios</span>
+          <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-850 shadow-xs space-y-4">
+            <div className="text-xs font-black uppercase tracking-wider text-brand-500">
+              Overseas Portfolios
             </div>
             <h3 className="font-headline font-bold text-lg text-surface-900 dark:text-surface-100">
               Diaspora Landlords
@@ -292,15 +288,15 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
               Property owners residing in the UK, USA, or Canada managing their Nigerian buildings completely hands-off.
             </p>
 
-            <div className="space-y-3 pt-2">
+            <div className="space-y-3 pt-1">
               {landlords.filter(l => l.is_diaspora).map(dl => (
-                <div key={dl.id} className="p-3.5 rounded-2xl bg-surface-50 dark:bg-surface-950 border border-surface-200 dark:border-surface-800 space-y-2">
+                <div key={dl.id} className="p-4 rounded-2xl bg-surface-50 dark:bg-surface-950 border border-surface-200 dark:border-surface-800 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-black text-surface-900 dark:text-surface-100">
                       {dl.full_name}
                     </span>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-600 border border-purple-500/20">
-                      🇬🇧 {dl.country}
+                      {dl.country}
                     </span>
                   </div>
                   <div className="text-[11px] text-surface-500">
@@ -324,17 +320,16 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
           </div>
 
           {/* Quick WhatsApp Sync Status */}
-          <div className="p-6 rounded-3xl bg-brand-500/5 border border-brand-500/20 space-y-3">
-            <div className="flex items-center gap-2 text-xs font-black text-brand-600 dark:text-brand-400">
-              <Smartphone className="w-4 h-4" />
-              <span>WhatsApp Live Engine</span>
+          <div className="p-5 sm:p-6 rounded-3xl bg-brand-500/5 border border-brand-500/20 space-y-3">
+            <div className="text-xs font-black uppercase tracking-wider text-brand-600 dark:text-brand-400">
+              WhatsApp Live Engine
             </div>
             <p className="text-xs text-surface-600 dark:text-surface-400 leading-relaxed">
               Any tenant payment recorded or property added on WhatsApp updates this dashboard in real-time.
             </p>
             <button
               onClick={openSimulator}
-              className="w-full py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-black text-xs uppercase tracking-wider transition-colors"
+              className="w-full py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-black text-xs uppercase tracking-wider transition-colors shadow-xs"
             >
               Open Interactive Assistant
             </button>

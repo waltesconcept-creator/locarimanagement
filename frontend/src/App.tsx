@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
+import { BottomNav } from './components/BottomNav';
 import { OverviewPage } from './pages/OverviewPage';
 import { PropertiesPage } from './pages/PropertiesPage';
 import { LandlordsPage } from './pages/LandlordsPage';
@@ -12,11 +13,12 @@ import { WhatsAppSimulatorPage } from './pages/WhatsAppSimulatorPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { api } from './services/api';
 import { Property, Landlord, Tenant, RentSchedule, PaymentRecord, MaintenanceRequest, TaskItem } from './types';
-import { RefreshCw, X, Smartphone } from 'lucide-react';
+import { RefreshCw, X } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState('overview');
   const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Core Data State
@@ -62,25 +64,28 @@ export const App: React.FC = () => {
   const pendingApprovalsCount = maintenance.filter(m => m.status === 'pending_landlord_approval').length;
 
   return (
-    <div className="min-h-screen bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-surface-100 flex flex-col antialiased">
+    <div className="min-h-screen bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-surface-100 flex flex-col antialiased selection:bg-brand-500 selection:text-surface-950">
       {/* Top Navbar */}
       <Navbar 
         currentTab={currentTab} 
         setCurrentTab={setCurrentTab} 
-        openSimulator={() => setIsSimulatorOpen(true)} 
+        openSimulator={() => setIsSimulatorOpen(true)}
+        openMobileMenu={() => setIsMobileMenuOpen(true)}
       />
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar */}
+        {/* Persistent Sidebar on Desktop, Flyout on Mobile */}
         <Sidebar 
           currentTab={currentTab} 
           setCurrentTab={setCurrentTab} 
           arrearsCount={overdueCount}
           pendingMaintCount={pendingApprovalsCount}
+          isMobileOpen={isMobileMenuOpen}
+          setIsMobileOpen={setIsMobileMenuOpen}
         />
 
-        {/* Main Workspace Area */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        {/* Main Workspace Area (With bottom padding on mobile for BottomNav) */}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
           {loading ? (
             <div className="h-64 flex flex-col items-center justify-center gap-3 text-xs text-surface-400">
               <RefreshCw className="w-6 h-6 animate-spin text-brand-500" />
@@ -160,14 +165,22 @@ export const App: React.FC = () => {
         </main>
       </div>
 
+      {/* Floating Bottom Nav for Mobile Screens */}
+      <BottomNav
+        currentTab={currentTab}
+        setCurrentTab={setCurrentTab}
+        openSimulator={() => setIsSimulatorOpen(true)}
+        openMobileMenu={() => setIsMobileMenuOpen(true)}
+        arrearsCount={overdueCount}
+      />
+
       {/* Slide-over WhatsApp Assistant Simulator Modal */}
       {isSimulatorOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-6 sm:p-8 space-y-4 shadow-2xl relative animate-scaleUp">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-xs">
+          <div className="w-full max-w-4xl max-h-[96vh] sm:max-h-[92vh] overflow-y-auto rounded-3xl bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-4 sm:p-8 space-y-4 shadow-2xl relative animate-scaleUp">
             <div className="flex items-center justify-between pb-3 border-b border-surface-200 dark:border-surface-800">
-              <div className="flex items-center gap-2.5 font-headline font-bold text-lg text-surface-900 dark:text-surface-100">
-                <Smartphone className="w-5 h-5 text-brand-500" />
-                <span>Locari WhatsApp Assistant (Live Simulator)</span>
+              <div className="font-headline font-bold text-base sm:text-lg text-surface-900 dark:text-surface-100">
+                Locari WhatsApp Assistant (Live Simulator)
               </div>
               <button
                 onClick={() => setIsSimulatorOpen(false)}

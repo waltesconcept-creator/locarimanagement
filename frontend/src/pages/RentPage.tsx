@@ -66,7 +66,7 @@ export const RentPage: React.FC<RentPageProps> = ({ schedules, payments, onRefre
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center p-1 rounded-2xl bg-surface-100 dark:bg-surface-850 border border-surface-200 dark:border-surface-800">
+        <div className="flex items-center p-1 rounded-2xl bg-surface-100 dark:bg-surface-850 border border-surface-200 dark:border-surface-800 overflow-x-auto max-w-full">
           <button
             onClick={() => setActiveTab('verification')}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${

@@ -9,21 +9,26 @@ import {
   CheckSquare, 
   Smartphone, 
   Settings,
-  AlertTriangle
+  X
 } from 'lucide-react';
+import { LocariLogo } from './LocariLogo';
 
 interface SidebarProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
   arrearsCount?: number;
   pendingMaintCount?: number;
+  isMobileOpen?: boolean;
+  setIsMobileOpen?: (open: boolean) => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
   currentTab, 
   setCurrentTab,
   arrearsCount = 1,
-  pendingMaintCount = 1
+  pendingMaintCount = 1,
+  isMobileOpen = false,
+  setIsMobileOpen
 }) => {
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -37,8 +42,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'settings', label: 'Settings & BotSailor', icon: Settings },
   ];
 
-  return (
-    <aside className="w-64 border-r border-surface-200 dark:border-surface-850 bg-white dark:bg-surface-950 flex flex-col justify-between py-6 px-3 shrink-0">
+  const handleSelect = (id: string) => {
+    setCurrentTab(id);
+    if (setIsMobileOpen) {
+      setIsMobileOpen(false);
+    }
+  };
+
+  const navContent = (
+    <div className="flex flex-col justify-between h-full py-6 px-3">
       <div className="space-y-1">
         <div className="px-3 pb-3 text-[11px] font-black uppercase tracking-wider text-surface-400 dark:text-surface-500">
           Operations Centre
@@ -51,7 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           return (
             <button
               key={item.id}
-              onClick={() => setCurrentTab(item.id)}
+              onClick={() => handleSelect(item.id)}
               className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${
                 isActive
                   ? 'bg-brand-500 text-surface-950 shadow-sm font-black'
@@ -62,11 +74,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <div className="flex items-center gap-3">
                 <Icon className={`w-4 h-4 ${isActive ? 'text-surface-950' : item.highlight ? 'text-brand-500' : 'text-surface-400 dark:text-surface-500'}`} />
-                <span>{item.label}</span>
+                <span className="whitespace-nowrap">{item.label}</span>
               </div>
 
               {item.badge && !isActive && (
-                <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${item.badgeColor}`}>
+                <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${item.badgeColor} whitespace-nowrap`}>
                   {item.badge}
                 </span>
               )}
@@ -76,15 +88,50 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Diaspora Quick Notice Card */}
-      <div className="p-3.5 rounded-2xl bg-surface-100 dark:bg-surface-900 border border-surface-200 dark:border-surface-800 space-y-2 text-xs">
-        <div className="flex items-center gap-1.5 font-bold text-surface-900 dark:text-surface-100">
-          <span>🌍</span>
-          <span>Diaspora Mode Active</span>
+      <div className="p-3.5 rounded-2xl bg-surface-100 dark:bg-surface-900 border border-surface-200 dark:border-surface-800 space-y-1.5 text-xs">
+        <div className="font-bold text-surface-900 dark:text-surface-100">
+          Diaspora Mode Active
         </div>
         <p className="text-[11px] text-surface-500 leading-relaxed">
           Overseas landlords receive WhatsApp financial summaries & repair video proofs automatically.
         </p>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* 1. Desktop Persistent Sidebar (Only visible on screens >= 1024px) */}
+      <aside className="hidden lg:flex w-64 border-r border-surface-200 dark:border-surface-850 bg-white dark:bg-surface-950 shrink-0">
+        {navContent}
+      </aside>
+
+      {/* 2. Mobile Flyout Drawer Modal (Visible when isMobileOpen is true) */}
+      {isMobileOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 flex">
+          {/* Backdrop */}
+          <div 
+            onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+          />
+
+          {/* Drawer Content */}
+          <div className="relative w-72 max-w-[80vw] h-full bg-white dark:bg-surface-950 shadow-2xl flex flex-col z-10">
+            <div className="flex items-center justify-between p-4 border-b border-surface-200 dark:border-surface-800">
+              <LocariLogo className="h-6 w-auto" badge="PM OS" />
+              <button
+                onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
+                className="w-8 h-8 rounded-full bg-surface-100 dark:bg-surface-850 flex items-center justify-center text-surface-500 hover:text-surface-900"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              {navContent}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };

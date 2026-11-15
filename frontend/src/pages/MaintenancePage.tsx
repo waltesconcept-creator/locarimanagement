@@ -104,10 +104,10 @@ export const MaintenancePage: React.FC<MaintenancePageProps> = ({ maintenance, p
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-black text-xs uppercase tracking-wider transition-all shadow-sm"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-black text-xs uppercase tracking-wider transition-all shadow-sm self-start sm:self-auto whitespace-nowrap"
         >
-          <Plus className="w-4 h-4" />
-          <span>Log Maintenance Ticket</span>
+          <Plus className="w-4 h-4 shrink-0" />
+          <span className="whitespace-nowrap">Log Maintenance Ticket</span>
         </button>
       </div>
 
