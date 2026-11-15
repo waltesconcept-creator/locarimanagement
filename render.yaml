@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: locari-property-management
+    name: locarimanagement
     runtime: node
     plan: free
     region: frankfurt
@@ -10,7 +10,5 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 22.13.0
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: 10000
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"
